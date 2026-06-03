@@ -1,0 +1,6 @@
+{
+  "name": "MM Computer",
+  "description": "MM Computer - Laptop Repair & Sales Shop in Kotli. Specializing in high-quality screen repair, battery replacement, keyboard fixes, and selling premium new, used, and gaming laptops.",
+  "requestFramePermissions": [],
+  "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
+}
