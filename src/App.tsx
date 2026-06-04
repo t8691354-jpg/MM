@@ -33,7 +33,9 @@ import {
   Database,
   Globe,
   Zap,
-  Tag
+  Tag,
+  ChevronDown,
+  Search
 } from 'lucide-react';
 import { motion, AnimatePresence } from 'motion/react';
 import MMLogo from './components/MMLogo';
@@ -60,6 +62,30 @@ interface LaptopItem {
   category: 'New' | 'Used' | 'Gaming';
   isPopular?: boolean;
 }
+
+// Comprehensive supported translation languages
+const ALL_LANGUAGES = [
+  { code: 'en', name: 'English', native: 'English' },
+  { code: 'ur', name: 'Urdu', native: 'اردو' },
+  { code: 'pa', name: 'Punjabi', native: 'پنجابی' },
+  { code: 'hi', name: 'Hindi', native: 'हिन्दी' },
+  { code: 'ar', name: 'Arabic', native: 'العربية' },
+  { code: 'ps', name: 'Pashto', native: 'پښتو' },
+  { code: 'sd', name: 'Sindhi', native: 'سنڌي' },
+  { code: 'bn', name: 'Bengali', native: 'বাংলা' },
+  { code: 'fa', name: 'Persian', native: 'فارسی' },
+  { code: 'tr', name: 'Turkish', native: 'Türkçe' },
+  { code: 'es', name: 'Spanish', native: 'Español' },
+  { code: 'fr', name: 'French', native: 'Français' },
+  { code: 'de', name: 'German', native: 'Deutsch' },
+  { code: 'zh-CN', name: 'Chinese', native: '中文' },
+  { code: 'ru', name: 'Russian', native: 'Русский' },
+  { code: 'ja', name: 'Japanese', native: '日本語' },
+  { code: 'ko', name: 'Korean', native: '한국어' },
+  { code: 'it', name: 'Italian', native: 'Italiano' },
+  { code: 'pt', name: 'Portuguese', native: 'Português' },
+  { code: 'nl', name: 'Dutch', native: 'Nederlands' },
+];
 
 // Accent palette states definition
 type ColorAccent = 'cyan' | 'gold' | 'emerald' | 'ruby';
@@ -113,76 +139,40 @@ export default function App() {
     return palette[accent];
   }, [accent]);
 
-  // Dynamic Localization State ('en' or 'roman')
-  const [lang, setLang] = useState<'en' | 'roman'>('en');
-
-  // Interactive Translations Matrix
+  // English Dedicated Sourced Translations Matrix
   const texts = useMemo(() => {
     return {
-      en: {
-        tagline: "Mega Master Laptop & Computer",
-        yearsTrusted: "12 Years Certified Trust in Kotli, Azad Kashmir",
-        heroTitle1: "Pristine Laptop Repairs",
-        heroTitle2: "& Sourced Certified Sales",
-        heroSub: "MM Computer is Kotli's elite tech solutions center. Fast diagnosis, OEM screen arrays, genuine warranties, and high-performance certified notebooks built to survive years.",
-        repairBtn: "Repair Now (Diagnostic Fault Hub)",
-        laptopStockBtn: "Showroom Catalog Grid",
-        compleatedTitle: "Lab completed Repair Queues Today",
-        stockTitle: "Premium Stock Sourced Models",
-        availNow: "Active Models Available Now",
-        exploreWorkspace: "Explore Multi-functional Interactive workspace Boards",
-        showroomTab: "💻 Sourced Laptop Showroom",
-        repairTab: "🔧 Laboratory Fault-Finder & Tracker",
-        builderTab: "🛠️ Workstation Custom PC Builder",
-        credentialsTab: "📞 Trust Credentials & Contact",
-        promoAlert: "🔥 Apply Promo Code 'MMSTU20' on Whatsapp for special 10% student/corp repair concession!",
-        searchPlaceholder: "Search specifications, CPU cores, or brands (e.g. i5, RTX, M1, Thinkpad)...",
-        allCategories: "🔥 Sourced Stock",
-        gamingCat: "🎮 Extreme GPU Gaming",
-        newCat: "✨ Brand New Packs",
-        usedCat: "📦 Corporate Return Used",
-        comparerTitle: "Visual Specs Side-by-Side Comparer Panel",
-        pcBuilderTitle: "Interactive Budget & Workload Assembler",
-        troubleshooterTitle: "Interactive Diagnostic Assistant Expert System",
-        trackerTitle: "Diagnostic Queue Stage Ticket Tracker",
-        addressLabel: "Physical Plaza Address",
-        emailLabel: "Corporate Support Inbox",
-        faqSectionTitle: "Expert Technical FAQ Library",
-        locatorTitle: "Interactive Address Map Pin",
-      },
-      roman: {
-        tagline: "Laptop aur Computer Ke Behtareen Specialist",
-        yearsTrusted: "Kotli Me Guzre 12 Saalon Se Sab Se Bharosay Mand Shop",
-        heroTitle1: "Zabardast Laptop Repairing",
-        heroTitle2: "Aur Guaranteed Sourced Sales",
-        heroSub: "MM Computer Kotli ki sab se premium hardware shop hai. Munasib kharacha, genuine screens, power backup batteries aur handpicked gaming notebooks pure warranty ke sath faram kiye jate hain.",
-        repairBtn: "Fault Check Karein (Free Diagnostic)",
-        laptopStockBtn: "Stock Aur Rates Dekhein",
-        compleatedTitle: "Aj Solved kiye gaye Repair orders",
-        stockTitle: "Sought-after Models Ka Stock",
-        availNow: "Behtareen Models Jo Abhi Ready Hain",
-        exploreWorkspace: "Interactive Workbench: Naye Features Istemaal Karein",
-        showroomTab: "💻 Laptops Stock & Compare",
-        repairTab: "🔧 Repair Lab & Tracker Tool",
-        builderTab: "🛠️ Custom PC Customizer",
-        credentialsTab: "📞 Card Wallet & Direct Contact",
-        promoAlert: "🔥 WhatsApp par special deal ke liye 'MMSTU20' code share karein aur 10% Discount paayein!",
-        searchPlaceholder: "Laptops search karein specs ke mutabiq (e.g. i7, SSD, Lenovo)...",
-        allCategories: "🔥 Tamam Models",
-        gamingCat: "🎮 Extreme Gaming Machine",
-        newCat: "✨ Brand New Packs",
-        usedCat: "📦 Sourced Used Models",
-        comparerTitle: "Laptops Ka Side-by-Side Specs Muqabla Panel",
-        pcBuilderTitle: "Interactive Desktop PC Builder Platform",
-        troubleshooterTitle: "Fault Diagnostics Checkup Robot System",
-        trackerTitle: "Apne Mobile / Repair Ticket Ka Status Tracker",
-        addressLabel: "MM Computer Ki Physical Location",
-        emailLabel: "Official Support Email",
-        faqSectionTitle: "Aam Tor Par Pooche Jane Waale Sawaalat",
-        locatorTitle: "Google Map Par Shop Ka Address",
-      }
-    }[lang];
-  }, [lang]);
+      tagline: "Mega Master Laptop & Computer",
+      yearsTrusted: "12 Years Certified Trust in Kotli, Azad Kashmir",
+      heroTitle1: "Pristine Laptop Repairs",
+      heroTitle2: "& Sourced Certified Sales",
+      heroSub: "MM Computer is Kotli's elite tech solutions center. Fast diagnosis, OEM screen arrays, genuine warranties, and high-performance certified notebooks built to survive years.",
+      repairBtn: "Repair Now (Diagnostic Fault Hub)",
+      laptopStockBtn: "Showroom Catalog Grid",
+      compleatedTitle: "Lab completed Repair Queues Today",
+      stockTitle: "Premium Stock Sourced Models",
+      availNow: "Active Models Available Now",
+      exploreWorkspace: "Explore Multi-functional Interactive workspace Boards",
+      showroomTab: "💻 Sourced Laptop Showroom",
+      repairTab: "🔧 Laboratory Fault-Finder & Tracker",
+      builderTab: "🛠️ Workstation Custom PC Builder",
+      credentialsTab: "📞 Trust Credentials & Contact",
+      promoAlert: "🔥 Apply Promo Code 'MMSTU20' on Whatsapp for special 10% student/corp repair concession!",
+      searchPlaceholder: "Search specifications, CPU cores, or brands (e.g. i5, RTX, M1, Thinkpad)...",
+      allCategories: "🔥 Sourced Stock",
+      gamingCat: "🎮 Extreme GPU Gaming",
+      newCat: "✨ Brand New Packs",
+      usedCat: "📦 Corporate Return Used",
+      comparerTitle: "Visual Specs Side-by-Side Comparer Panel",
+      pcBuilderTitle: "Interactive Budget & Workload Assembler",
+      troubleshooterTitle: "Interactive Diagnostic Assistant Expert System",
+      trackerTitle: "Diagnostic Queue Stage Ticket Tracker",
+      addressLabel: "Physical Plaza Address",
+      emailLabel: "Corporate Support Inbox",
+      faqSectionTitle: "Expert Technical FAQ Library",
+      locatorTitle: "Interactive Address Map Pin",
+    };
+  }, []);
 
   // Main Interactive Navigation Tabs System
   const [activeWorkspaceTab, setActiveWorkspaceTab] = useState<'showroom' | 'repair' | 'builder' | 'credentials'>('showroom');
@@ -207,6 +197,60 @@ export default function App() {
   // Business Phone Configurations
   const WHATSAPP_RAW = '923430407210';
 
+  // Searchable Translator States
+  const [selectedLang, setSelectedLang] = useState('en');
+  const [langDropdownOpen, setLangDropdownOpen] = useState(false);
+  const [langSearchQuery, setLangSearchQuery] = useState('');
+
+  // Handle click outside to close language dropdown
+  useEffect(() => {
+    const handleOutsideClick = (e: MouseEvent) => {
+      if (langDropdownOpen && !(e.target as HTMLElement).closest('.translation-searchable-wrapper')) {
+        setLangDropdownOpen(false);
+      }
+    };
+    document.addEventListener('click', handleOutsideClick);
+    return () => document.removeEventListener('click', handleOutsideClick);
+  }, [langDropdownOpen]);
+
+  // Sync state with Google Translate
+  useEffect(() => {
+    const interval = setInterval(() => {
+      const combo = document.querySelector('.goog-te-combo') as HTMLSelectElement | null;
+      if (combo && combo.value) {
+        setSelectedLang(combo.value);
+        clearInterval(interval);
+      } else {
+        const match = document.cookie.match(/googtrans=\/en\/([^;]+)/);
+        if (match && match[1]) {
+          setSelectedLang(match[1]);
+          clearInterval(interval);
+        }
+      }
+    }, 1000);
+
+    return () => clearInterval(interval);
+  }, []);
+
+  // Load Google Translate Widget dynamically for all users to translate to any language
+  useEffect(() => {
+    (window as any).googleTranslateElementInit = () => {
+      new (window as any).google.translate.TranslateElement({
+        pageLanguage: 'en',
+        layout: (window as any).google.translate.TranslateElement.InlineLayout.SIMPLE,
+        autoDisplay: false
+      }, 'google_translate_element');
+    };
+
+    if (!document.getElementById('google-translate-script')) {
+      const script = document.createElement('script');
+      script.id = 'google-translate-script';
+      script.src = 'https://translate.google.com/translate_a/element.js?cb=googleTranslateElementInit';
+      script.async = true;
+      document.body.appendChild(script);
+    }
+  }, []);
+
   useEffect(() => {
     const handleScroll = () => {
       setScrollTopVisible(window.scrollY > 400);
@@ -214,6 +258,36 @@ export default function App() {
     window.addEventListener('scroll', handleScroll);
     return () => window.removeEventListener('scroll', handleScroll);
   }, []);
+
+  // Searchable Translator Memoized Values and Handlers
+  const activeLangObj = useMemo(() => {
+    return ALL_LANGUAGES.find(l => l.code === selectedLang) || { code: 'en', name: 'English', native: 'English' };
+  }, [selectedLang]);
+
+  const filteredLanguages = useMemo(() => {
+    if (!langSearchQuery) return ALL_LANGUAGES;
+    const q = langSearchQuery.toLowerCase().trim();
+    return ALL_LANGUAGES.filter(l => 
+      l.name.toLowerCase().includes(q) || 
+      l.native.toLowerCase().includes(q) ||
+      l.code.toLowerCase().includes(q)
+    );
+  }, [langSearchQuery]);
+
+  const handleLanguageSelect = (code: string) => {
+    setSelectedLang(code);
+    setLangDropdownOpen(false);
+    setLangSearchQuery('');
+    
+    const googleCombo = document.querySelector('.goog-te-combo') as HTMLSelectElement | null;
+    if (googleCombo) {
+      googleCombo.value = code;
+      googleCombo.dispatchEvent(new Event('change'));
+    } else {
+      document.cookie = `googtrans=/en/${code}; path=/; domain=${window.location.hostname}`;
+      document.cookie = `googtrans=/en/${code}; path=/`;
+    }
+  };
 
   // Sourced Laptops Database (Total 12 Certified units)
   const laptops: LaptopItem[] = [
@@ -496,20 +570,74 @@ ${picAlert}`;
          </div>
          <span className="mx-auto sm:mx-0 truncate">{texts.promoAlert}</span>
          
-         {/* Simple localized toggle button in header */}
-         <div className="flex items-center gap-1 bg-slate-900 border border-slate-800 rounded-lg p-0.5 shrink-0">
-           <button 
-             onClick={() => setLang('en')}
-             className={`px-2 py-0.5 rounded text-[10px] font-black cursor-pointer transition ${lang === 'en' ? 'bg-sky-500 text-white shadow' : 'text-slate-400 hover:text-white'}`}
+         {/* Beautiful styled Google Translate container dropdown with search list on a single line */}
+         <div className="flex items-center gap-1.5 bg-slate-900 border border-slate-800 rounded-lg py-0.5 px-2 shrink-0 select-none relative translation-searchable-wrapper">
+           <div id="google_translate_element" className="hidden pointer-events-none absolute w-0 h-0 overflow-hidden" aria-hidden="true" />
+           <Globe className="w-3.5 h-3.5 text-sky-450 shrink-0 select-none" />
+           <span className="text-[10px] font-black text-slate-300 hidden md:inline tracking-wider uppercase select-none">Translate / زبان:</span>
+           
+           {/* Compact single-line trigger */}
+           <button
+             type="button"
+             onClick={() => setLangDropdownOpen(!langDropdownOpen)}
+             className="flex items-center gap-1 px-1 focus:outline-none text-[10px] font-black tracking-wider uppercase text-amber-400 cursor-pointer select-none min-h-[22px]"
            >
-             ENG
+             <span>{activeLangObj.name}</span>
+             <ChevronDown className={`w-3.5 h-3.5 text-slate-400 transition-transform duration-300 ${langDropdownOpen ? 'rotate-180' : ''}`} />
            </button>
-           <button 
-             onClick={() => setLang('roman')}
-             className={`px-2 py-0.5 rounded text-[10px] font-black cursor-pointer transition ${lang === 'roman' ? 'bg-[#FBBF24] text-slate-950 shadow' : 'text-slate-400 hover:text-white'}`}
-           >
-             ROMAN URDU
-           </button>
+
+           {/* Floating popover with search box */}
+           {langDropdownOpen && (
+             <div className="absolute right-0 top-full mt-2 w-64 bg-slate-950 border border-slate-800 rounded-xl shadow-2xl p-2.5 z-[200] flex flex-col gap-2 normal-case font-sans">
+               <div className="relative flex items-center bg-slate-900 border border-slate-800 rounded-lg px-2.5 py-1.5">
+                 <Search className="w-3.5 h-3.5 text-slate-500 shrink-0 mr-2" />
+                 <input 
+                   type="text"
+                   value={langSearchQuery}
+                   onChange={(e) => setLangSearchQuery(e.target.value)}
+                   placeholder="Search / زبان تلاش کریں..."
+                   className="w-full bg-transparent text-xs text-slate-100 placeholder-slate-500 outline-none p-0 font-medium"
+                   autoFocus
+                 />
+                 {langSearchQuery && (
+                   <button 
+                     type="button"
+                     onClick={() => setLangSearchQuery('')}
+                     className="text-slate-500 hover:text-slate-300 p-0.5"
+                   >
+                     <X className="w-3 h-3" />
+                   </button>
+                 )}
+               </div>
+
+               <div className="max-h-52 overflow-y-auto custom-scrollbar flex flex-col gap-0.5 pr-1 text-slate-200">
+                 {filteredLanguages.length > 0 ? (
+                   filteredLanguages.map((langItem) => {
+                     const isSelected = selectedLang === langItem.code;
+                     return (
+                       <button
+                         key={langItem.code}
+                         type="button"
+                         onClick={() => handleLanguageSelect(langItem.code)}
+                         className={`w-full flex items-center justify-between text-left px-2.5 py-2 rounded-lg text-xs transition duration-150 cursor-pointer ${
+                           isSelected 
+                             ? 'bg-sky-500/20 text-sky-400 font-bold border border-sky-500/10' 
+                             : 'hover:bg-slate-800/80 text-slate-300 border border-transparent'
+                         }`}
+                       >
+                         <span className="font-bold">{langItem.name} <span className="text-[10px] text-slate-500 font-medium font-sans">({langItem.native})</span></span>
+                         {isSelected && <Check className="w-3.5 h-3.5 text-sky-400 shrink-0" />}
+                       </button>
+                     );
+                   })
+                 ) : (
+                   <div className="text-center py-4 text-xs text-slate-500 font-bold uppercase tracking-wider">
+                     No match found
+                   </div>
+                 )}
+               </div>
+             </div>
+           )}
          </div>
       </div>
 
@@ -690,7 +818,7 @@ ${picAlert}`;
                        className="w-full flex items-center justify-center gap-2 py-3.5 rounded-xl bg-emerald-500 text-slate-950 hover:bg-emerald-600 transition font-black text-xs sm:text-sm uppercase tracking-wider cursor-pointer"
                      >
                        <MessageSquare className="w-4 h-4 shrink-0" />
-                       <span>{lang === 'en' ? "Open Instant WhatsApp chat" : "WhatsApp Par Direct Baat Karein"}</span>
+                       <span>Open Instant WhatsApp chat</span>
                      </button>
 
                   </div>
@@ -1055,14 +1183,12 @@ ${picAlert}`;
                      Recycle & Liquidation Services
                   </span>
                   <h3 className="text-2xl sm:text-3.5xl font-black text-white uppercase tracking-tight">
-                     {lang === 'en' ? "Want to Liquidity-Sell or Trade old computers?" : "Apna Purana Laptop Ya Computer Bechein!"}
+                     Want to Liquidity-Sell or Trade old computers?
                   </h3>
                   <div className="w-16 h-1 bg-sky-500" />
                   
                   <p className="text-sm text-slate-405 leading-relaxed font-semibold">
-                     {lang === 'en' 
-                       ? "We actively acquire old, vintage, or discarded laptops, full workstation set-ups, LED screens, monitors, and parts. Simply describe specs below for safe appraisal value estimates directly from Saqib Saheb."
-                       : "Hum munasib cash price par purane monitors, laptops aur PC related hardware khareedtay hain. Tafseelat share karein aur dukan anay se pehlay direct WhatsApp par rate check karein!"}
+                     We actively acquire old, vintage, or discarded laptops, full workstation set-ups, LED screens, monitors, and parts. Simply describe specs below for safe appraisal value estimates directly from Saqib Saheb.
                   </p>
 
                   <ul className="space-y-2.5 text-xs font-bold text-slate-400">
@@ -1088,7 +1214,7 @@ ${picAlert}`;
                      <form onSubmit={handleSellSubmit} className="space-y-4">
                         <div className="grid sm:grid-cols-2 gap-4">
                            <div>
-                              <label className="block text-[10px] uppercase font-black text-slate-500 mb-1.5">{lang === 'en' ? "Full Name *" : "Naam *"}</label>
+                              <label className="block text-[10px] uppercase font-black text-slate-500 mb-1.5">Full Name *</label>
                               <input 
                                  type="text" 
                                  required
@@ -1100,7 +1226,7 @@ ${picAlert}`;
                            </div>
 
                            <div>
-                              <label className="block text-[10px] uppercase font-black text-slate-500 mb-1.5">{lang === 'en' ? "Whatsapp Contact *" : "Rabta Number *"}</label>
+                              <label className="block text-[10px] uppercase font-black text-slate-500 mb-1.5">Whatsapp Contact *</label>
                               <input 
                                  type="tel" 
                                  required
@@ -1229,22 +1355,16 @@ ${picAlert}`;
             <div className="space-y-4">
                {[
                  {
-                   q: lang === 'en' ? "Will microelectronic board repairs require several working days?" : "Board repair me kitna time lagta hai?",
-                   a: lang === 'en' 
-                     ? "Most standard chip level bios flash or charging IC repairs require 24 to 48 hours for complete lab stability stress checking. Common items are handled faster."
-                     : "Aam tor par BIOS flash ya power IC ke repairs me 24 se 48 ghantay lagtay hain takay board ko laboratory me stress check kiya ja sakay."
+                   q: "Will microelectronic board repairs require several working days?",
+                   a: "Most standard chip level bios flash or charging IC repairs require 24 to 48 hours for complete lab stability stress checking. Common items are handled faster."
                  },
                  {
-                   q: lang === 'en' ? "Are diagnostic checking procedures totally free of cost?" : "Kya diagnostic checking sach me bilkul free hai?",
-                   a: lang === 'en'
-                     ? "Absolutely! We do not charge anything for opening up, checking, testing voltage parameters, or diagnosing any laptop error. You only pay for hardware replacements."
-                     : "Ji haan! Laptop ko kholnay, checks laganay aur test karne ki hamari shop par koi fees nahi li jati. Aap sirf badlay hue parts ke paise detay hain."
+                   q: "Are diagnostic checking procedures totally free of cost?",
+                   a: "Absolutely! We do not charge anything for opening up, checking, testing voltage parameters, or diagnosing any laptop error. You only pay for hardware replacements."
                  },
                  {
-                   q: lang === 'en' ? "What quality is the screen replacements fitted at the store?" : "Replacement screens kis quality ki hoti hain?",
-                   a: lang === 'en'
-                     ? "Each display panel replacement is sourced directly from certified original equipment manufacturers (OEMs). We supply high dynamic sRGB sRGB panels, 144Hz options for gaming setups, or high resolution matte anti-glare screen modules with complete physical warrants."
-                     : "Tamam displays direct OEM factories se mawaad kiye jate hain, jin me 144Hz high-speed designs aur executive sRGB display panel shamil hain."
+                   q: "What quality is the screen replacements fitted at the store?",
+                   a: "Each display panel replacement is sourced directly from certified original equipment manufacturers (OEMs). We supply high dynamic sRGB sRGB panels, 144Hz options for gaming setups, or high resolution matte anti-glare screen modules with complete physical warrants."
                  }
                ].map((faq, fIdx) => (
                  <details key={fIdx} className="group p-5 bg-slate-900/60 border border-slate-850 rounded-2xl [&_summary::-webkit-details-marker]:hidden transition duration-300">
