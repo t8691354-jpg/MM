@@ -812,8 +812,8 @@ ${picAlert}`;
                         </div>
                         <div>
                            <p className="text-[10px] text-emerald-400 font-black tracking-widest uppercase">Support Hotline</p>
-                           <p className="text-sm font-extrabold text-white leading-tight">Muhammad Saqib Saheb</p>
-                           <p className="text-xs text-slate-400 font-bold font-mono mt-0.5">0343-0407210 / 0345-6799101</p>
+                           <p className="text-sm font-extrabold text-white leading-tight">Muhammad Saqib</p>
+                           <p className="text-xs text-slate-400 font-bold font-mono mt-0.5">0343-0407210 / 0349-3444500</p>
                         </div>
                      </div>
 
