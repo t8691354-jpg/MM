@@ -44,6 +44,10 @@ import RepairTracker from './components/RepairTracker';
 import ComputerBuilder from './components/ComputerBuilder';
 import InteractiveTroubleshooter from './components/InteractiveTroubleshooter';
 import LaptopComparer from './components/LaptopComparer';
+import BuySellMarketplace from './components/BuySellMarketplace';
+import ComputerAcademy from './components/ComputerAcademy';
+import PriceIntelligence from './components/PriceIntelligence';
+import CustomerDashboard from './components/CustomerDashboard';
 
 // Laptop Data Type Definition
 interface LaptopItem {
@@ -175,7 +179,7 @@ export default function App() {
   }, []);
 
   // Main Interactive Navigation Tabs System
-  const [activeWorkspaceTab, setActiveWorkspaceTab] = useState<'showroom' | 'repair' | 'builder' | 'credentials'>('showroom');
+  const [activeWorkspaceTab, setActiveWorkspaceTab] = useState<'showroom' | 'repair' | 'builder' | 'marketplace' | 'academy' | 'pricing' | 'dashboard' | 'credentials'>('showroom');
 
   // Search state for laptops grid
   const [searchQuery, setSearchQuery] = useState('');
@@ -853,12 +857,16 @@ ${picAlert}`;
            </div>
 
            {/* Interactive Board Selector Tabs */}
-           <div className="grid grid-cols-2 md:grid-cols-4 gap-3 mb-10 max-w-5xl mx-auto">
+           <div className="grid grid-cols-2 sm:grid-cols-4 lg:grid-cols-8 gap-3 mb-10 max-w-7xl mx-auto">
              {[
-               { id: 'showroom', label: texts.showroomTab },
-               { id: 'repair', label: texts.repairTab },
-               { id: 'builder', label: texts.builderTab },
-               { id: 'credentials', label: texts.credentialsTab }
+               { id: 'showroom', label: 'Showroom 💻' },
+               { id: 'repair', label: 'AI Diagnostic 🔧' },
+               { id: 'builder', label: 'AI PC Builder 🛠️' },
+               { id: 'marketplace', label: 'Marketplace 💰' },
+               { id: 'academy', label: 'MM Academy 🎓' },
+               { id: 'pricing', label: 'Price Intel 📊' },
+               { id: 'dashboard', label: 'Dashboard 👤' },
+               { id: 'credentials', label: 'Contact 📞' }
              ].map((board) => {
                const isActive = activeWorkspaceTab === board.id;
                return (
@@ -1101,6 +1109,34 @@ ${picAlert}`;
                   </div>
 
                   <ComputerBuilder />
+               </div>
+             )}
+
+             {/* Live Buy/Sell Community Marketplace */}
+             {activeWorkspaceTab === 'marketplace' && (
+               <div className="space-y-6 animate-fade-in-up">
+                 <BuySellMarketplace />
+               </div>
+             )}
+
+             {/* MM Lab Technical Academy */}
+             {activeWorkspaceTab === 'academy' && (
+               <div className="space-y-6 animate-fade-in-up">
+                 <ComputerAcademy />
+               </div>
+             )}
+
+             {/* Live Price index Tracking Intelligence */}
+             {activeWorkspaceTab === 'pricing' && (
+               <div className="space-y-6 animate-fade-in-up">
+                 <PriceIntelligence />
+               </div>
+             )}
+
+             {/* Personal Customer Repair Status Dashboard */}
+             {activeWorkspaceTab === 'dashboard' && (
+               <div className="space-y-6 animate-fade-in-up">
+                 <CustomerDashboard />
                </div>
              )}
 

@@ -236,6 +236,58 @@ export default function RepairTracker() {
             })}
           </div>
 
+          {/* Holographic Al-Zamin Plaza Lab Floor Workspace Map */}
+          <div className="p-5 rounded-2xl border border-slate-800/80 bg-slate-950/90 shadow-inner relative overflow-hidden">
+            <div className="absolute top-2 right-2 flex items-center gap-1 bg-yellow-500/10 border border-yellow-500/20 px-2 py-0.5 rounded text-[8px] font-black text-amber-400 tracking-wider uppercase">
+              <span className="w-1.5 h-1.5 rounded-full bg-amber-400 animate-ping"></span>
+              Live Location telemetry
+            </div>
+            
+            <h5 className="text-[10px] font-black uppercase text-slate-400 tracking-widest mb-3 flex items-center gap-1.5">
+              <span>📍 Physical Lab Floor Desk Location (Kotli Hub)</span>
+            </h5>
+            
+            <div className="grid grid-cols-2 md:grid-cols-5 gap-3.5 mt-2 text-center text-[10px]">
+              {[
+                { key: 'received', title: 'Intake Cabinet', desc: 'Secure Logging Section', color: 'border-blue-500/30' },
+                { key: 'diagnosed', title: 'Scope Workspace', desc: 'Fluke Multimeter Audits', color: 'border-purple-500/30' },
+                { key: 'repairing', title: 'Solder Station 03', desc: 'Artic Thermal Paste Applied', color: 'border-orange-500/30' },
+                { key: 'testing', title: 'Heatsink Burn-Rack', desc: '3DMark Thermal Benchmarks', color: 'border-yellow-500/30' },
+                { key: 'ready', title: 'Checkout Logistics', desc: 'Polished & Boxed Shelf', color: 'border-emerald-500/30' }
+              ].map((desk) => {
+                const isSelected = activeResult.status === desk.key;
+                return (
+                  <div
+                    key={desk.key}
+                    className={`p-3 rounded-xl border relative transition-all duration-300 ${
+                      isSelected 
+                        ? 'bg-gradient-to-br from-indigo-950 to-slate-900 border-sky-400 text-sky-400 shadow-lg shadow-sky-500/5 scale-[1.03] ring-1 ring-sky-500/20' 
+                        : 'bg-slate-900/40 border-slate-850 text-slate-500'
+                    }`}
+                  >
+                    {isSelected && (
+                      <span className="absolute -top-1 -right-1 w-2.5 h-2.5 rounded-full bg-sky-400 flex items-center justify-center border border-slate-950">
+                        <span className="w-1.5 h-1.5 rounded-full bg-sky-200 animate-ping"></span>
+                      </span>
+                    )}
+                    <h6 className={`font-black uppercase tracking-wider text-[11px] ${isSelected ? 'text-sky-450' : 'text-slate-400'}`}>
+                      {desk.title}
+                    </h6>
+                    <p className={`text-[9px] mt-1 font-medium leading-relaxed ${isSelected ? 'text-slate-350' : 'text-slate-500'}`}>
+                      {desk.desc}
+                    </p>
+                    <div className="mt-2.5 flex items-center justify-center gap-1">
+                      <span className={`w-1.5 h-1.5 rounded-full ${isSelected ? 'bg-sky-400 animate-pulse' : 'bg-slate-700'}`} />
+                      <span className="font-mono text-[8px] uppercase tracking-wide font-bold">
+                        {isSelected ? 'Device Here' : 'Empty Station'}
+                      </span>
+                    </div>
+                  </div>
+                );
+              })}
+            </div>
+          </div>
+
           {/* Expert Lab Diagnostics Comments */}
           <div className="p-4 rounded-xl bg-slate-900/50 border border-slate-800/80">
             <div className="flex items-center gap-2 mb-2 text-xs font-bold text-amber-500 uppercase tracking-widest">
