@@ -167,7 +167,7 @@ export default function BusinessCards({ darkMode, openWhatsApp }: BusinessCardsP
                     <p className="text-[10px] text-slate-600 mt-1 font-semibold flex items-center gap-2">
                       <span>📞 0343-0407210</span>
                       <span className="text-slate-300">|</span>
-                      <span>💬 0349-3444500</span>
+                      <span>💬 0345-6799101</span>
                     </p>
                   </div>
 
@@ -225,7 +225,7 @@ export default function BusinessCards({ darkMode, openWhatsApp }: BusinessCardsP
                         <span 
                           onClick={(e) => {
                             e.stopPropagation();
-                            openWhatsApp("Hello Saqib Saheb! I reached you via the Royal Gold Card on your website.");
+                            openWhatsApp("Hello Muhammad Saqib! I reached you via the Royal Gold Card on your website.");
                           }}
                           className="font-bold font-mono text-emerald-400 hover:underline cursor-pointer"
                         >

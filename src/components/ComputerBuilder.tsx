@@ -334,7 +334,7 @@ export default function ComputerBuilder() {
       }
     });
 
-    const bodyText = `Assalam-o-Alaikum Saqib Saheb!
+    const bodyText = `Assalam-o-Alaikum Muhammad Saqib!
 I configured my Custom PC Build on your MM Computer website. Here is my selected hardware configurations list:
 ${specListLines}
 

@@ -92,7 +92,7 @@ export default function CustomerDashboard() {
   ];
 
   const triggerQuoteWhatsApp = (quote: SavedQuote) => {
-    const text = `Assalamu Alaykum Saqib Saheb! I saved my custom configuration "${quote.name}" on your app dashboard. Total cost estimate: Rs ${quote.totalCostPKR.toLocaleString()}.\n\nSpecifications list: ${quote.partsSummary}.\n\nPlease coordinate parts availability at Al-Zamin Plaza, Kotli!`;
+    const text = `Assalamu Alaykum Muhammad Saqib! I saved my custom configuration "${quote.name}" on your app dashboard. Total cost estimate: Rs ${quote.totalCostPKR.toLocaleString()}.\n\nSpecifications list: ${quote.partsSummary}.\n\nPlease coordinate parts availability at Al-Zamin Plaza, Kotli!`;
     const encoded = encodeURIComponent(text);
     window.open(`https://wa.me/923430407210?text=${encoded}`, '_blank');
   };

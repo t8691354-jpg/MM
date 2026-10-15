@@ -98,7 +98,7 @@ export default function RepairTracker() {
          device: "General Client Laptop / Desktop Computer Custom Unit",
         dateReceived: "Received Recently",
         status: finalStatus,
-        technicianNotes: `Diagnostic scan executed successfully for query ${cleanId}. Currently routing parts procurement protocols. Expertly handled with MM genuine spare pledge. Contact Saqib Saheb to check details.`,
+        technicianNotes: `Diagnostic scan executed successfully for query ${cleanId}. Currently routing parts procurement protocols. Expertly handled with MM genuine spare pledge. Contact Muhammad Saqib to check details.`,
         estimatedCompletion: finalStatus === 'ready' ? 'Ready for Pickup' : 'Expected 1 working day',
         priceEstimated: "Estimated: Rs 1,500 - 3,500 (Varies)",
         steps: [
@@ -302,7 +302,7 @@ export default function RepairTracker() {
           {/* Immediate WhatsApp Action to CEO about ticket */}
           <div className="text-center bg-slate-900/20 border border-slate-850 p-4 rounded-xl flex flex-col sm:flex-row justify-between items-center gap-4">
             <p className="text-xs text-slate-400 font-semibold text-left">
-              💬 Have customized technical questions or parts questions regarding <strong>{activeResult.id}</strong>? Let Saqib Saheb handle it.
+              💬 Have customized technical questions or parts questions regarding <strong>{activeResult.id}</strong>? Let Muhammad Saqib handle it.
             </p>
             <button 
               onClick={() => {

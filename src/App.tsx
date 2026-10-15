@@ -18,6 +18,7 @@ import {
   Clock, 
   Star, 
   ShieldCheck, 
+  Lock,
   Check, 
   Menu, 
   X, 
@@ -48,24 +49,21 @@ import BuySellMarketplace from './components/BuySellMarketplace';
 import ComputerAcademy from './components/ComputerAcademy';
 import PriceIntelligence from './components/PriceIntelligence';
 import CustomerDashboard from './components/CustomerDashboard';
-
-// Laptop Data Type Definition
-interface LaptopItem {
-  id: string;
-  name: string;
-  specs: {
-    cpu: string;
-    ram: string;
-    storage: string;
-    gpu?: string;
-    screen: string;
-  };
-  price: number; // in PKR
-  image: string;
-  condition: string;
-  category: 'New' | 'Used' | 'Gaming';
-  isPopular?: boolean;
-}
+import ShopkeeperPortal from './components/ShopkeeperPortal';
+import { 
+  LaptopItem, 
+  ShopServiceItem, 
+  RepairTicketItem, 
+  QuickSaleRecord,
+  getStoredLaptops, 
+  saveStoredLaptops, 
+  getStoredServices, 
+  saveStoredServices, 
+  getStoredTickets, 
+  saveStoredTickets, 
+  getStoredSales, 
+  saveStoredSales 
+} from './data/shopData';
 
 // Comprehensive supported translation languages
 const ALL_LANGUAGES = [
@@ -179,7 +177,13 @@ export default function App() {
   }, []);
 
   // Main Interactive Navigation Tabs System
-  const [activeWorkspaceTab, setActiveWorkspaceTab] = useState<'showroom' | 'repair' | 'builder' | 'marketplace' | 'academy' | 'pricing' | 'dashboard' | 'credentials'>('showroom');
+  const [activeWorkspaceTab, setActiveWorkspaceTab] = useState<'showroom' | 'repair' | 'builder' | 'marketplace' | 'academy' | 'pricing' | 'dashboard' | 'shopkeeper' | 'credentials'>('showroom');
+
+  // Persistent shopkeeper datasets connected across the entire website
+  const [laptops, setLaptops] = useState<LaptopItem[]>(getStoredLaptops);
+  const [services, setServices] = useState<ShopServiceItem[]>(getStoredServices);
+  const [tickets, setTickets] = useState<RepairTicketItem[]>(getStoredTickets);
+  const [sales, setSales] = useState<QuickSaleRecord[]>(getStoredSales);
 
   // Search state for laptops grid
   const [searchQuery, setSearchQuery] = useState('');
@@ -293,222 +297,17 @@ export default function App() {
     }
   };
 
-  // Sourced Laptops Database (Total 12 Certified units)
-  const laptops: LaptopItem[] = [
-    {
-      id: "hp-victus-15",
-      name: "HP Victus 15 GameEngine",
-      specs: {
-        cpu: "Intel Core i5-12450H",
-        ram: "16GB DDR4 Dual-Channel",
-        storage: "512GB PCIe Gen4 SSD",
-        gpu: "NVIDIA RTX 3050 4GB DDR6",
-        screen: "15.6\" FHD IPS 144Hz Slim-Bezel"
-      },
-      price: 185000,
-      image: "https://images.unsplash.com/photo-1603302576837-37561b2e2302?auto=format&fit=crop&w=600&q=80",
-      condition: "Brand New Box Packed",
-      category: "Gaming",
-      isPopular: true
-    },
-    {
-      id: "lenovo-thinkpad-x1",
-      name: "Lenovo ThinkPad X1 Carbon Gen 8",
-      specs: {
-        cpu: "Intel Core i7-10610U vPro",
-        ram: "16GB LPDDR3 Ultra-Fast",
-        storage: "512GB NVMe M.2 High-Speed SSD",
-        gpu: "Intel UHD Graphics 620",
-        screen: "14.0\" FHD IPS Anti-Glare Touch screen"
-      },
-      price: 85000,
-      image: "https://images.unsplash.com/photo-1541807084-5c52b6b3adef?auto=format&fit=crop&w=600&q=80",
-      condition: "Used (9.5/10 condition)",
-      category: "Used",
-      isPopular: true
-    },
-    {
-      id: "dell-latitude-7490",
-      name: "Dell Latitude 7490 Robust",
-      specs: {
-        cpu: "Intel Core i5-8350U Quad-Core",
-        ram: "8GB DDR4 (Customizable to 16GB)",
-        storage: "256GB Solid State Drive (SATA/NVMe)",
-        gpu: "Intel Integrated HD Graphics",
-        screen: "14.0\" FHD IPS Anti-Reflective display"
-      },
-      price: 42000,
-      image: "https://images.unsplash.com/photo-1618424181497-157f25b6ddd5?auto=format&fit=crop&w=600&q=80",
-      condition: "Used (9/10 Grade-A)",
-      category: "Used"
-    },
-    {
-      id: "apple-macbook-air-m1",
-      name: "Apple MacBook Air M1 Space Gray",
-      specs: {
-        cpu: "Apple M1 Silicon Chip (8-Core)",
-        ram: "8GB Unified Memory Architecture",
-        storage: "256GB Superfast SSD Storage",
-        gpu: "7-Core Apple GPU Co-processor",
-        screen: "13.3\" Retina Display with True Tone"
-      },
-      price: 165000,
-      image: "https://images.unsplash.com/photo-1517336714731-489689fd1ca8?auto=format&fit=crop&w=600&q=80",
-      condition: "Used (Mint 10/10 Condition)",
-      category: "Used",
-      isPopular: true
-    },
-    {
-      id: "asus-rog-strix-g15",
-      name: "ASUS ROG Strix G15 RGB Pro",
-      specs: {
-        cpu: "AMD Ryzen 7 5800H Octa-Core",
-        ram: "16GB DDR4 3200MHz RAM",
-        storage: "1TB HyperDrive PCIe Gen3 SSD",
-        gpu: "NVIDIA GeForce RTX 3060 6GB GDDR6",
-        screen: "15.6\" FHD IPS 300Hz 3ms eSports Display"
-      },
-      price: 245000,
-      image: "https://images.unsplash.com/photo-1607604276583-eef5d076aa5f?auto=format&fit=crop&w=600&q=80",
-      condition: "Used (9.8/10 Collector Grade)",
-      category: "Gaming"
-    },
-    {
-      id: "hp-elitebook-840-g8",
-      name: "HP EliteBook 840 G8 Alumash",
-      specs: {
-        cpu: "Intel Core i5-1145G7 Turbo",
-        ram: "16GB DDR4 3200MHz System RAM",
-        storage: "256GB Solid State NVMe Drive",
-        gpu: "Intel Iris Xe Premium Graphics",
-        screen: "14.0\" Full HD IPS anti-glare screen"
-      },
-      price: 92000,
-      image: "https://images.unsplash.com/photo-1496181130204-755241524eab?auto=format&fit=crop&w=600&q=80",
-      condition: "Used (9.5/10 Executive Sourced)",
-      category: "Used"
-    },
-    {
-      id: "lenovo-ideapad-slim-3",
-      name: "Lenovo IdeaPad Slim 3 15IAU7",
-      specs: {
-        cpu: "Intel Core i3-1215U Advanced",
-        ram: "8GB DDR4 High Speed memory",
-        storage: "512GB NVMe Gen4 SSD Array",
-        gpu: "Intel Ultra-HD Integrated GPU",
-        screen: "15.6\" FHD IPS 300nits Anti-Glare"
-      },
-      price: 98000,
-      image: "https://images.unsplash.com/photo-1531297484001-80022131f5a1?auto=format&fit=crop&w=600&q=80",
-      condition: "Brand New Box Packed",
-      category: "New"
-    },
-    {
-      id: "dell-inspiron-15-3520",
-      name: "Dell Inspiron 15 Carbon Sleek",
-      specs: {
-        cpu: "Intel Core i5-1235U 10-Cores",
-        ram: "8GB DDR4 Expandable Memory",
-        storage: "512GB Fast NVMe M.2 Storage SSD",
-        gpu: "Intel UHD Iris Xe Graphics",
-        screen: "15.6\" Full HD IPS 120Hz Fluid Panel"
-      },
-      price: 135000,
-      image: "https://images.unsplash.com/photo-1525547719571-a2d4ac8945e2?auto=format&fit=crop&w=600&q=80",
-      condition: "Brand New International Box",
-      category: "New",
-      isPopular: true
-    },
-    {
-      id: "acer-nitro-v-15",
-      name: "Acer Nitro V 15 Ultimate",
-      specs: {
-        cpu: "Intel Core i5-13420H 13th Gen",
-        ram: "16GB DDR5 High-Bandwidth RAM",
-        storage: "512GB PCIe Gen4 M.2 SSD",
-        gpu: "NVIDIA GeForce RTX 4050 6GB GDDR6",
-        screen: "15.6\" FHD 144Hz IPS Matte Display"
-      },
-      price: 225000,
-      image: "https://images.unsplash.com/photo-1629131726617-431975e17154?auto=format&fit=crop&w=600&q=80",
-      condition: "Brand New Sealed Box",
-      category: "Gaming"
-    },
-    {
-      id: "hp-probook-440-g9",
-      name: "HP ProBook 440 G9 Enterprise",
-      specs: {
-        cpu: "Intel Core i7-1255U Ten-Cores",
-        ram: "16GB DDR4 High-Speed RAM",
-        storage: "512GB NVMe SSD Drive",
-        gpu: "Intel Iris Xe Graphic Accelerators",
-        screen: "14.0\" FHD Narrow-Margin IPS Tech"
-      },
-      price: 175000,
-      image: "https://images.unsplash.com/photo-1588872657578-7efd1f1555ed?auto=format&fit=crop&w=600&q=80",
-      condition: "Brand New Box Packed",
-      category: "New"
-    },
-    {
-      id: "dell-g15-5530-rtx",
-      name: "Dell G15 5530 Heavy Duty",
-      specs: {
-        cpu: "Intel Core i7-13650HX 14-Cores",
-        ram: "16GB Dual-Channel DDR5 4800MHz",
-        storage: "512GB Gen4 High Velocity SSD",
-        gpu: "NVIDIA GeForce RTX 4060 8GB GDDR6",
-        screen: "15.6\" FHD Active-Matrix 165Hz G-Sync"
-      },
-      price: 285000,
-      image: "https://images.unsplash.com/photo-1593642632823-8f785ba67e45?auto=format&fit=crop&w=600&q=80",
-      condition: "Brand New Retail Version",
-      category: "Gaming",
-      isPopular: true
-    },
-    {
-      id: "lenovo-thinkpad-l14-g2",
-      name: "Lenovo ThinkPad L14 Gen 2 AMD",
-      specs: {
-        cpu: "AMD Ryzen 5 Pro 5650U Hexa-Core",
-        ram: "16GB DDR4 Robust Memory",
-        storage: "512GB NVMe Gen3 PCIe SSD",
-         gpu: "AMD Radeon RX Vega 7 Graphics",
-        screen: "14.0\" Full HD IPS Anti-Glare"
-      },
-      price: 78000,
-      image: "https://images.unsplash.com/photo-1499951360447-b19be8fe80f5?auto=format&fit=crop&w=600&q=80",
-      condition: "Used (9.2/10 Elite Business Asset)",
-      category: "Used"
-    }
-  ];
-
-  // Services Catalog Reference Dataset
-  const services = [
-    {
-      title: "Display Panels Replacing",
-      costRange: "Starting Rs 2,500",
-      desc: "Full HD, IPS sRGB and anti-glare screen panels replaced professionally while you check.",
-      icon: Monitor,
-    },
-    {
-      title: "OEM Sourced Batteries",
-      costRange: "Starting Rs 2,500",
-      desc: "Genuine high-health long duration laptop batteries with store testing warranties.",
-      icon: BatteryCharging,
-    },
-    {
-      title: "Premium Keyboard Slabs",
-      costRange: "Starting Rs 2,000",
-      desc: "Key mechanics or full hardware panel replacements under professional dust extraction.",
-      icon: Keyboard,
-    },
-    {
-      title: "RAM & Gen-4 NVMe SSDs",
-      costRange: "Starting Rs 1,500",
-      desc: "Massive fast dual-channel RAM modules and super high velocity SSD storage array swaps.",
-      icon: Database,
-    }
-  ];
+  // Dynamic icon helper for repair services
+  const getServiceIcon = (category: string, title: string) => {
+    const t = (title + ' ' + category).toLowerCase();
+    if (t.includes('screen') || t.includes('display')) return Monitor;
+    if (t.includes('battery') || t.includes('power')) return BatteryCharging;
+    if (t.includes('keyboard')) return Keyboard;
+    if (t.includes('ram') || t.includes('ssd') || t.includes('storage') || t.includes('data')) return Database;
+    if (t.includes('board') || t.includes('soldering') || t.includes('chip')) return Cpu;
+    if (t.includes('printer') || t.includes('toner')) return Printer;
+    return Wrench;
+  };
 
   // Helper WhatsApp Launch
   const openWhatsApp = (msg: string) => {
@@ -533,7 +332,7 @@ export default function App() {
         (item.specs.gpu && item.specs.gpu.toLowerCase().includes(searchQuery.toLowerCase()));
       return matchCat && matchSearch;
     });
-  }, [activeCategory, searchQuery]);
+  }, [laptops, activeCategory, searchQuery]);
 
   // Form Selling Handlers
   const handleSellSubmit = (e: React.FormEvent) => {
@@ -686,13 +485,23 @@ ${picAlert}`;
              </div>
           </div>
 
-          {/* Quick Consultation CTA */}
-          <div className="flex items-center gap-3.5">
+          {/* Quick Shopkeeper Login & Contact */}
+          <div className="flex items-center gap-2 sm:gap-3">
             <button
-               onClick={() => openWhatsApp("Assalam-o-Alaikum! Please connect me with Saqib Saheb regarding immediate technical computer enquiries.")}
-               className={`hidden px-5 py-2.5 rounded-2xl font-black text-xs sm:text-sm text-slate-950 uppercase tracking-wider bg-gradient-to-r ${glowStyle.gradient} transform hover:-translate-y-0.5 active:translate-y-0 transition cursor-pointer shadow-lg`}
+              onClick={() => {
+                setActiveWorkspaceTab('shopkeeper');
+                scrollTo('workspaceBoard');
+              }}
+              className="px-3.5 py-2 rounded-xl font-black text-[11px] bg-amber-500/15 hover:bg-amber-500/25 text-amber-400 border border-amber-500/30 uppercase tracking-wider flex items-center gap-1.5 transition cursor-pointer"
+              title="Shopkeeper / Owner Admin Portal"
             >
-              Consult CEO
+              <span>Shopkeeper Portal 🔐</span>
+            </button>
+            <button
+               onClick={() => openWhatsApp("Assalam-o-Alaikum! Please connect me with Muhammad Saqib regarding immediate technical computer enquiries.")}
+               className={`hidden sm:inline-flex px-4 py-2 rounded-xl font-black text-xs text-slate-950 uppercase tracking-wider bg-gradient-to-r ${glowStyle.gradient} transform hover:-translate-y-0.5 active:translate-y-0 transition cursor-pointer shadow-lg`}
+            >
+              Contact Saqib
             </button>
           </div>
         </div>
@@ -813,7 +622,7 @@ ${picAlert}`;
                         <div>
                            <p className="text-[10px] text-emerald-400 font-black tracking-widest uppercase">Support Hotline</p>
                            <p className="text-sm font-extrabold text-white leading-tight">Muhammad Saqib</p>
-                           <p className="text-xs text-slate-400 font-bold font-mono mt-0.5">0343-0407210 / 0349-3444500</p>
+                           <p className="text-xs text-slate-400 font-bold font-mono mt-0.5">0343-0407210 / 0345-6799101</p>
                         </div>
                      </div>
 
@@ -857,7 +666,7 @@ ${picAlert}`;
            </div>
 
            {/* Interactive Board Selector Tabs */}
-           <div className="grid grid-cols-2 sm:grid-cols-4 lg:grid-cols-8 gap-3 mb-10 max-w-7xl mx-auto">
+           <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-9 gap-2.5 mb-10 max-w-7xl mx-auto">
              {[
                { id: 'showroom', label: 'Showroom 💻' },
                { id: 'repair', label: 'AI Diagnostic 🔧' },
@@ -865,7 +674,8 @@ ${picAlert}`;
                { id: 'marketplace', label: 'Marketplace 💰' },
                { id: 'academy', label: 'MM Academy 🎓' },
                { id: 'pricing', label: 'Price Intel 📊' },
-               { id: 'dashboard', label: 'Dashboard 👤' },
+               { id: 'dashboard', label: 'Customer Hub 👤' },
+               { id: 'shopkeeper', label: 'Shopkeeper Portal 🔐' },
                { id: 'credentials', label: 'Contact 📞' }
              ].map((board) => {
                const isActive = activeWorkspaceTab === board.id;
@@ -1001,7 +811,7 @@ ${picAlert}`;
 
                              <button
                                onClick={() => {
-                                 const msg = `Hello Saqib Saheb! I am extremely interested in buying ${laptop.name} (Specs: Core CPU ${laptop.specs.cpu}, ${laptop.specs.ram}) from Kotli stock. Is this available for purchase or physical checkout?`;
+                                 const msg = `Hello Muhammad Saqib! I am extremely interested in buying ${laptop.name} (Specs: Core CPU ${laptop.specs.cpu}, ${laptop.specs.ram}) from Kotli stock. Is this available for purchase or physical checkout?`;
                                  openWhatsApp(msg);
                                }}
                                className="px-3.5 py-2 hover:bg-emerald-600 bg-emerald-500 text-slate-950 font-black rounded-lg text-xs tracking-wider uppercase transition cursor-pointer"
@@ -1063,7 +873,7 @@ ${picAlert}`;
 
                      <div className="grid sm:grid-cols-2 md:grid-cols-4 gap-4">
                        {services.map((ser, sIdx) => {
-                         const IconObj = ser.icon;
+                         const IconObj = getServiceIcon(ser.category, ser.title);
                          return (
                             <div key={sIdx} className="p-4 rounded-xl bg-slate-900 border border-slate-850 flex flex-col gap-3 justify-between">
                               <div className="flex justify-between items-start">
@@ -1137,6 +947,34 @@ ${picAlert}`;
              {activeWorkspaceTab === 'dashboard' && (
                <div className="space-y-6 animate-fade-in-up">
                  <CustomerDashboard />
+               </div>
+             )}
+
+             {/* Dedicated Shopkeeper Admin & Owner Portal */}
+             {activeWorkspaceTab === 'shopkeeper' && (
+               <div className="space-y-6 animate-fade-in-up">
+                 <ShopkeeperPortal 
+                   laptops={laptops}
+                   onUpdateLaptops={(updated) => {
+                     setLaptops(updated);
+                     saveStoredLaptops(updated);
+                   }}
+                   services={services}
+                   onUpdateServices={(updated) => {
+                     setServices(updated);
+                     saveStoredServices(updated);
+                   }}
+                   tickets={tickets}
+                   onUpdateTickets={(updated) => {
+                     setTickets(updated);
+                     saveStoredTickets(updated);
+                   }}
+                   sales={sales}
+                   onUpdateSales={(updated) => {
+                     setSales(updated);
+                     saveStoredSales(updated);
+                   }}
+                 />
                </div>
              )}
 
@@ -1224,7 +1062,7 @@ ${picAlert}`;
                   <div className="w-16 h-1 bg-sky-500" />
                   
                   <p className="text-sm text-slate-405 leading-relaxed font-semibold">
-                     We actively acquire old, vintage, or discarded laptops, full workstation set-ups, LED screens, monitors, and parts. Simply describe specs below for safe appraisal value estimates directly from Saqib Saheb.
+                     We actively acquire old, vintage, or discarded laptops, full workstation set-ups, LED screens, monitors, and parts. Simply describe specs below for safe appraisal value estimates directly from Muhammad Saqib.
                   </p>
 
                   <ul className="space-y-2.5 text-xs font-bold text-slate-400">
@@ -1444,10 +1282,22 @@ ${picAlert}`;
 
             <div className="flex flex-col sm:flex-row justify-between items-center gap-4 text-[11px] text-slate-500 font-semibold">
                <p>© {new Date().getFullYear()} MM Computer, Al-Zamin Plaza, Pindi Road, Kotli, AJK. All rights reserved.</p>
-               <p className="flex items-center gap-1 hover:text-white cursor-pointer" onClick={() => openWhatsApp("Hello!")}>
-                  <span>Fast, Powerful, Beautiful Sourced Website</span>
-                  <ExternalLink className="w-3.5 h-3.5" />
-               </p>
+               <div className="flex items-center gap-4">
+                 <button 
+                   onClick={() => {
+                     setActiveWorkspaceTab('shopkeeper');
+                     scrollTo('workspaceBoard');
+                   }}
+                   className="text-amber-400 hover:text-amber-300 font-bold flex items-center gap-1 cursor-pointer transition"
+                 >
+                   <Lock className="w-3 h-3" />
+                   <span>Shopkeeper Portal (دکان دار پورٹل)</span>
+                 </button>
+                 <p className="flex items-center gap-1 hover:text-white cursor-pointer" onClick={() => openWhatsApp("Hello!")}>
+                    <span>MM Computer Kotli</span>
+                    <ExternalLink className="w-3.5 h-3.5" />
+                 </p>
+               </div>
             </div>
 
          </div>
